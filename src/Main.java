@@ -15,5 +15,6 @@ public class Main {
         forFile.avarageSalaryByDepartment("src\\data\\average_salary_by_department.txt");
         forFile.longestServingEmployee("src\\data\\longest_serving_employee.txt");
 forFile.forPosition("src\\data\\employees_by_position.txt.");
+forFile.forDepartmentAndPosition("src\\data\\employees_by_department_and_position.txt");
     }
 }

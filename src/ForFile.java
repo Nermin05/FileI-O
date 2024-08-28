@@ -16,6 +16,8 @@ public class ForFile {
     public Set<Employee> uniqueEmployeesSet;
 public Map<Department, Double> avarageSalaryMap;
     public Map<Position, Long> countsForPosition;
+    public Map<Department, Map<Position, List<Employee>>> groupForDepartmentAndPosition;
+
 
     public ForFile() {
         employeeList = new ArrayList<>();
@@ -135,6 +137,28 @@ public Map<Department, Double> avarageSalaryMap;
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
             for (Map.Entry<Position,Long> employee : countsForPosition.entrySet())
                 bufferedWriter.write(employee.getKey() + " " + employee.getValue() + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void forDepartmentAndPosition(String fileName) {//9
+        groupForDepartmentAndPosition = employeeList.stream().collect(Collectors.groupingBy(Employee::getDepartment,
+                Collectors.groupingBy(Employee::getPosition)));
+
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(fileName))) {
+            for (Map.Entry<Department, Map<Position, List<Employee>>> departmentEntry : groupForDepartmentAndPosition.entrySet()) {
+                Department department = departmentEntry.getKey();
+                bufferedWriter.write("Department: " + department.name() + "\n");
+
+                for (Map.Entry<Position, List<Employee>> positionEntry : departmentEntry.getValue().entrySet()) {
+                    Position position = positionEntry.getKey();
+                    bufferedWriter.write("Department:" + position.name() + "\n");
+
+                    for (Employee employee : positionEntry.getValue()) {
+                        bufferedWriter.write(employee+"\n");
+                    }
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
